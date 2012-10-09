@@ -18,6 +18,6 @@ from .metadata import (
 
 __all__ = [
     '__author__', '__copyright__', '__email__', '__license__',
-    '__maintainer__', '__version__', 'Facebook', 'FacebookError'
+    '__maintainer__', '__version__'
 ]
 
