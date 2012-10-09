@@ -13,7 +13,6 @@ setup(
     version = metadata.__version__,
     license = metadata.__license__,
     description = 'A fantastic way to sync your files to S3.',
-    long_description=long_description,
     author = metadata.__author__,
     author_email = metadata.__email__,
     packages=['statictastic'],
