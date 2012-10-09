@@ -15,7 +15,11 @@ setup(
     description = 'A fantastic way to sync your files to S3.',
     author = metadata.__author__,
     author_email = metadata.__email__,
-    packages=['statictastic'],
+    packages=[
+        'statictastic',
+        'statictastic.management',
+        'statictastic.management.commands',
+    ],
     install_requires=[],
 )
 
