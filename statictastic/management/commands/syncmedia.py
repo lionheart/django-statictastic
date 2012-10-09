@@ -10,12 +10,6 @@ from django.core.files.base import ContentFile
 
 from statictastic.progress import SnakeIndicator
 
-from slimit import minify as minify_js
-from cssmin import cssmin as minify_css
-
-ACCESS_KEY_NAME = getattr(settings, 'AWS_S3_ACCESS_KEY_ID', getattr(settings, 'AWS_ACCESS_KEY_ID', None))
-SECRET_KEY_NAME = getattr(settings, 'AWS_S3_SECRET_ACCESS_KEY', getattr(settings, 'AWS_SECRET_ACCESS_KEY', None))
-
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         staticstorage = storage.staticfiles_storage
