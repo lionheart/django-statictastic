@@ -15,7 +15,7 @@ class VersionedS3BotoStorage(s3boto.S3BotoStorage):
             url = super(VersionedS3BotoStorage, self).url(name)
             return "{}?{}".format(url, settings.COMMIT_SHA[:5])
         else:
-            return "{}{}?{}".format(STATIC_URL, url, settings.COMMIT_SHA[:5])
+            return "{}{}?{}".format(STATIC_URL, name, settings.COMMIT_SHA[:5])
 
 
 class VersionedFileSystemStorage(django_storage.FileSystemStorage):
