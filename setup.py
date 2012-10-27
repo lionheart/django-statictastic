@@ -19,6 +19,7 @@ setup(
         'statictastic',
         'statictastic.management',
         'statictastic.management.commands',
+        'statictastic.templatetags',
     ],
     install_requires=[],
 )
