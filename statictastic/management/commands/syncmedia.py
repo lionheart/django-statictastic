@@ -5,9 +5,9 @@ from hashlib import md5
 
 from django.core.management.base import BaseCommand
 from django.contrib.staticfiles import finders, storage
-from django.conf import settings
 from django.core.files.base import ContentFile
 
+from boto.exception import S3ResponseError
 from statictastic.progress import SnakeIndicator
 
 class Command(BaseCommand):
@@ -18,11 +18,16 @@ class Command(BaseCommand):
                 checksums = json.load(checksum_file)
         except IOError:
             checksums = {}
+        except S3ResponseError:
+            checksums = {}
 
         indicator = SnakeIndicator("%s", "%d files skipped, %d files updated")
         num_updated = 0
         for finder in finders.get_finders():
             for path, localstorage in finder.list(['CVS', '.*', '*~']):
+                if path.startswith("bundled"):
+                    continue
+
                 with localstorage.open(path) as source_file:
                     computed_md5 = md5(source_file.read()).hexdigest()
                     existing_md5 = checksums.get(path)
@@ -33,14 +38,12 @@ class Command(BaseCommand):
                             prefixed_path = localstorage.prefix + path
                         else:
                             prefixed_path = path
+
                         staticstorage.save(prefixed_path, source_file)
                         num_updated += 1
-                        print prefixed_path, computed_md5, existing_md5
+                        print prefixed_path
 
-                    indicator.write(path, indicator.index-num_updated, num_updated)
-                    indicator.animate()
-
-        indicator.flush()
+        print "{} file{} updated".format(num_updated, '' if num_updated == 1 else 's')
 
         staticstorage.save("checksums", ContentFile(json.dumps(checksums)))
         if hasattr(staticstorage, 'post_process'):
