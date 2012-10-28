@@ -1,5 +1,6 @@
 import re
 from hashlib import md5
+from urlparse import urljoin
 
 from django.core.cache import cache
 from django import template
@@ -24,8 +25,9 @@ class CompressNode(template.Node):
         self.nodelist = nodelist
 
     def render(self, context):
-        r = re.compile(r'[\n\r]')
-        output = re.sub(r, '', self.nodelist.render(context)).strip()
+        linebreaks = re.compile(r'[\n\r]')
+        urls = re.compile(r'url\(([^\(\)]*)\)')
+        output = re.sub(linebreaks, '', self.nodelist.render(context)).strip()
         html_checksum = md5(output).hexdigest()
 
         cache_key = "statictastic:{}".format(html_checksum)
@@ -35,9 +37,16 @@ class CompressNode(template.Node):
             output_elements = []
             compiled_css_content = ""
             for element in input_elements:
+                element.make_links_absolute(settings.BASE_URL)
                 if element.tag == "link" and 'rel' in element.attrib and element.attrib['rel'] == "stylesheet":
-                    element.make_links_absolute(settings.BASE_URL)
-                    response = requests.get(element.attrib['href'])
+                    css_url = element.attrib['href']
+                    response = requests.get(css_url)
+                    content = response.content
+                    for match in urls.finditer(content):
+                        if match:
+                            relative_url = match.group(1)
+                            content.replace(relative_url, urljoin(css_url, relative_url))
+
                     compiled_css_content += response.content
                 elif element.tag == 'style' and 'type' in element.attrib and element.attrib['type'] == 'text/css':
                     compiled_css_content += element.text_content()
