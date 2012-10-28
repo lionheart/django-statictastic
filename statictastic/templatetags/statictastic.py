@@ -26,7 +26,7 @@ class CompressNode(template.Node):
 
     def render(self, context):
         linebreaks = re.compile(r'[\n\r]')
-        urls = re.compile(r'url\(([^\(\)]*)\)')
+        urls = re.compile(r'url\([\'"]?([^\(\)\'"]*)[\'"]?\)')
         output = re.sub(linebreaks, '', self.nodelist.render(context)).strip()
         html_checksum = md5(output).hexdigest()
 
