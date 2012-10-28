@@ -45,7 +45,7 @@ class CompressNode(template.Node):
                     for match in urls.finditer(content):
                         if match:
                             relative_url = match.group(1)
-                            content.replace(relative_url, urljoin(css_url, relative_url))
+                            content = content.replace(relative_url, urljoin(css_url, relative_url))
 
                     compiled_css_content += content
                 elif element.tag == 'style' and 'type' in element.attrib and element.attrib['type'] == 'text/css':
