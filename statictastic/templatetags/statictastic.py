@@ -47,6 +47,8 @@ class CompressNode(template.Node):
             compiled_css_content = cssmin.cssmin(compiled_css_content)
             staticstorage = storage.staticfiles_storage
             checksum = md5(compiled_css_content).hexdigest()
+
+            # TODO: This breaks relative links. Figure out a way to rewrite those appropriately.
             filename = "bundled/css/{}.css".format(checksum)
             staticstorage.save(filename, ContentFile(compiled_css_content))
             output_elements.append(etree.Element("link", attrib={'rel': 'stylesheet', 'href': staticstorage.url(filename)}))
