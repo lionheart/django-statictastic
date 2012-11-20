@@ -8,7 +8,6 @@ from django.contrib.staticfiles import finders, storage
 from django.core.files.base import ContentFile
 
 from boto.exception import S3ResponseError
-from statictastic.progress import SnakeIndicator
 
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
@@ -21,7 +20,6 @@ class Command(BaseCommand):
         except S3ResponseError:
             checksums = {}
 
-        indicator = SnakeIndicator("%s", "%d files skipped, %d files updated")
         num_updated = 0
         for finder in finders.get_finders():
             for path, localstorage in finder.list(['CVS', '.*', '*~']):
@@ -41,7 +39,7 @@ class Command(BaseCommand):
 
                         staticstorage.save(prefixed_path, source_file)
                         num_updated += 1
-                        print prefixed_path
+                        print "Updated", prefixed_path
 
         print "{} file{} updated".format(num_updated, '' if num_updated == 1 else 's')
 
