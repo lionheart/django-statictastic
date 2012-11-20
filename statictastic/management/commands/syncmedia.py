@@ -2,6 +2,7 @@ import gzip
 import json
 from io import BytesIO
 from hashlib import md5
+from optparse import make_option
 
 from django.core.management.base import BaseCommand
 from django.contrib.staticfiles import finders, storage
@@ -10,6 +11,10 @@ from django.core.files.base import ContentFile
 from boto.exception import S3ResponseError
 
 class Command(BaseCommand):
+    option_list = BaseCommand.option_list + (
+        make_option('--ignore', dest='ignore', help="Ignore paths that match this regex."),
+    )
+
     def handle(self, *args, **kwargs):
         staticstorage = storage.staticfiles_storage
         try:
@@ -20,10 +25,15 @@ class Command(BaseCommand):
         except S3ResponseError:
             checksums = {}
 
+        ignore = kwargs['ignore']
+
         num_updated = 0
         for finder in finders.get_finders():
             for path, localstorage in finder.list(['CVS', '.*', '*~']):
                 if path.startswith("bundled"):
+                    continue
+
+                if path.startswith(ignore):
                     continue
 
                 with localstorage.open(path) as source_file:
