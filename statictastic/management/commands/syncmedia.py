@@ -33,7 +33,7 @@ class Command(BaseCommand):
                 if path.startswith("bundled"):
                     continue
 
-                if path.startswith(ignore):
+                if ignore and path.startswith(ignore):
                     continue
 
                 with localstorage.open(path) as source_file:
