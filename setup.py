@@ -21,6 +21,6 @@ setup(
         'statictastic.management.commands',
         'statictastic.templatetags',
     ],
-    install_requires=['requests', 'cssmin'],
+    install_requires=['requests'],
 )
 
