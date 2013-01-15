@@ -1,3 +1,7 @@
+"""
+This module is currently under development. Do not use!
+"""
+
 import re
 from hashlib import md5
 from urlparse import urljoin
