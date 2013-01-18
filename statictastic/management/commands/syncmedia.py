@@ -13,6 +13,7 @@ from boto.exception import S3ResponseError
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
         make_option('--ignore', dest='ignore', help="Ignore paths that match this regex."),
+        make_option('--force-sync', dest='force_sync', action='store_true', help="Update all files, regardless of whether or not they have already been synced."),
     )
 
     def handle(self, *args, **kwargs):
@@ -26,6 +27,7 @@ class Command(BaseCommand):
             checksums = {}
 
         ignore = kwargs['ignore']
+        force_sync = kwargs['force_sync']
 
         num_updated = 0
         for finder in finders.get_finders():
@@ -39,7 +41,7 @@ class Command(BaseCommand):
                 with localstorage.open(path) as source_file:
                     computed_md5 = md5(source_file.read()).hexdigest()
                     existing_md5 = checksums.get(path)
-                    if computed_md5 != existing_md5:
+                    if computed_md5 != existing_md5 or force_sync:
                         checksums[path] = computed_md5
                         source_file.open()
                         if localstorage.prefix:
