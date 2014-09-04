@@ -44,10 +44,15 @@ class Command(BaseCommand):
                     if computed_md5 != existing_md5 or force_sync:
                         checksums[path] = computed_md5
                         source_file.open()
-                        if localstorage.prefix:
-                            prefixed_path = localstorage.prefix + path
-                        else:
+                        try:
+                            localstorage.prefix
+                        except AttributeError:
                             prefixed_path = path
+                        else:
+                            if localstorage.prefix:
+                                prefixed_path = localstorage.prefix + path
+                            else:
+                                prefixed_path = path
 
                         staticstorage.save(prefixed_path, source_file)
                         num_updated += 1
