@@ -56,9 +56,9 @@ class Command(BaseCommand):
 
                         staticstorage.save(prefixed_path, source_file)
                         num_updated += 1
-                        print "Updated", prefixed_path
+                        print("Updated", prefixed_path)
 
-        print "{} file{} updated".format(num_updated, '' if num_updated == 1 else 's')
+        print("{} file{} updated".format(num_updated, '' if num_updated == 1 else 's'))
 
         staticstorage.save("checksums", ContentFile(json.dumps(checksums)))
         if hasattr(staticstorage, 'post_process'):
