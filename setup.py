@@ -8,7 +8,7 @@ except ImportError:
     from distutils.core import setup
 
 metadata = {}
-execfile("bigstore/metadata.py", metadata)
+execfile("statictastic/metadata.py", metadata)
 
 setup(
     name='django-statictastic',
