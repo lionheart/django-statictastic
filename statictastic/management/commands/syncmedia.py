@@ -11,10 +11,9 @@ from django.core.files.base import ContentFile
 from boto.exception import S3ResponseError
 
 class Command(BaseCommand):
-    option_list = BaseCommand.option_list + (
-        make_option('--ignore', dest='ignore', help="Ignore paths that match this regex."),
-        make_option('--force-sync', dest='force_sync', action='store_true', help="Update all files, regardless of whether or not they have already been synced."),
-    )
+    def add_arguments(self, parser):
+        parser.add_argument('--ignore', dest='ignore', help="Ignore paths that match this regex."),
+        parser.add_argument('--force-sync', dest='force_sync', action='store_true', help="Update all files, regardless of whether or not they have already been synced."),
 
     def handle(self, *args, **kwargs):
         staticstorage = storage.staticfiles_storage
