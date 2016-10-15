@@ -1,14 +1,14 @@
-#!/usr/bin/env/python
+#!/usr/bin/env/python3
 
 import os
+import runpy
 
 try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
 
-metadata = {}
-execfile("statictastic/metadata.py", metadata)
+metadata = runpy.run_path("statictastic/metadata.py")
 
 setup(
     name='django-statictastic',
