@@ -19,7 +19,8 @@ class Command(BaseCommand):
         staticstorage = storage.staticfiles_storage
         try:
             with staticstorage.open("checksums") as checksum_file:
-                checksums = json.load(checksum_file)
+                checksum_data = checksum_file.read().decode("utf-8")
+                checksums = json.loads(checksum_data)
         except IOError:
             checksums = {}
         except S3ResponseError:
