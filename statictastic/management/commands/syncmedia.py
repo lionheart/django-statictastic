@@ -22,7 +22,7 @@ from django.core.management.base import BaseCommand
 from django.contrib.staticfiles import finders, storage
 from django.core.files.base import ContentFile
 
-from boto.exception import S3ResponseError
+from botocore.exceptions import ClientError
 
 class Command(BaseCommand):
     def add_arguments(self, parser):
@@ -37,7 +37,7 @@ class Command(BaseCommand):
                 checksums = json.loads(checksum_data)
         except IOError:
             checksums = {}
-        except S3ResponseError:
+        except ClientError:
             checksums = {}
 
         ignore = kwargs['ignore']
@@ -74,7 +74,7 @@ class Command(BaseCommand):
 
         print("{} file{} updated".format(num_updated, '' if num_updated == 1 else 's'))
 
-        staticstorage.save("checksums", ContentFile(json.dumps(checksums)))
+        staticstorage.save("checksums", ContentFile(json.dumps(checksums).encode('utf-8')))
         if hasattr(staticstorage, 'post_process'):
             processor = staticstorage.post_process(files)
 
