@@ -39,6 +39,6 @@ setup(
         'statictastic.management.commands',
         'statictastic.templatetags',
     ],
-    install_requires=["requests>=2.0.0", "cssmin>=0.2.0", "lxml>=3.0.0"],
+    install_requires=["requests>=2.0.0", "cssmin>=0.2.0", "lxml>=3.0.0", "boto3>=1.9.239", "django-storages>=1.7.1"],
 )
 
