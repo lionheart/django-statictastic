@@ -18,10 +18,10 @@ If you’re running on Python 3.0 or greater, use this:
 
 ::
 
-    statictastic>=3.0
+   statictastic>=3.0
 
 If you’re running on Python 2.7 or earlier, use the following instead:
 
 ::
 
-    statictastic>=1.0,<=2.0
+   statictastic>=1.0,<=2.0
